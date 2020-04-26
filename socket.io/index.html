@@ -32,7 +32,7 @@
             let box = document.getElementById('content');
             let p = document.createElement('p');
             let span = document.createElement('span');
-            span.innerHTML = msg.text;
+            span.innerText = msg.text;
             p.appendChild(span);
             box.appendChild(p)
             if (msg.user) {
