@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/index.css" />
+</head>
+
+<body>
+    <div class="container">
+        <header>Chat</header>
+        <div class="content" id="content"></div>
+        <div class="editor">
+            <textarea id="editor_text"></textarea>
+        </div>
+    </div>
+    <script>
+        //WebSocket 原生js
+        const ws = new WebSocket('ws://localhost:8050/');
+        let id = Math.random();
+        ws.onopen = () => {
+            console.log('已连接服务器');
+        }
+        document.onkeydown = (e) => {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                let text = document.getElementById('editor_text').value;
+                ws.send(JSON.stringify({ text, id }));
+            }
+        }
+        ws.onmessage = (msg) => {
+            let box = document.getElementById('content');
+            let p = document.createElement('p');
+            let span = document.createElement('span');
+            let data = JSON.parse(msg.data);
+            span.innerHTML = data.text;
+            if (id == data.id) {
+                span.setAttribute('class', 'text text_right');
+            } else {
+                span.setAttribute('class', 'text');
+            }
+            p.appendChild(span);
+            box.appendChild(p);
+            document.getElementById('editor_text').value = '';
+        }
+        ws.onclose = () => {
+            console.log('服务器关闭');
+        }
+    </script>
+</body>
+
+</html>
