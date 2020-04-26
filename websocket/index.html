@@ -35,7 +35,7 @@
             let p = document.createElement('p');
             let span = document.createElement('span');
             let data = JSON.parse(msg.data);
-            span.innerHTML = data.text;
+            span.innerText = data.text;
             if (id == data.id) {
                 span.setAttribute('class', 'text text_right');
             } else {
